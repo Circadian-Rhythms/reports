@@ -1,0 +1,51 @@
+\documentclass[]{article}
+
+\usepackage[left=3cm, right=3cm, top=2cm, bottom=1.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{natbib}
+\usepackage{pifont}
+\usepackage{pdflscape}
+
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+\newcommand*{\studycol}[1]{\parbox[c]{5cm}{\raggedright #1}}%
+\newcommand*{\statscol}[1]{\parbox[c]{4cm}{\raggedright #1}}%
+\newcommand*{\excludcol}[1]{\parbox[c]{5cm}{\raggedright #1}}%
+\newcommand*{\imputcol}[1]{\parbox[c]{5cm}{\raggedright #1}}%
+%opening
+\title{Literature review of data cleaning and imputing for accelerometer data}
+\author{Victor Hugo Nagahama}
+
+\begin{document}
+%\maketitle
+
+\begin{landscape}
+	\begin{table}[h]
+		\centering
+		\caption{Summary of statistical technique, rules to exclude individuals due accelerometer and imputation method adopted in papers using UK Biobank accelerometer dataset. CR is the acronym for Circadian Rhythm and the dash (--) represents no information provided}
+		\resizebox{\columnwidth}{!}{
+			\begin{tabular}{lcllll}
+				\hline
+				Paper & CR & Study & Statistical analysis & Excluding criteria & Imputation method \\ \hline \hline
+				
+				\cite{Doherty2017} & \xmark & \studycol{Effect of factors (sex, season, time of day) in physical activities} & \statscol{Non-parametric tests and ANOVA} & \excludcol{Non-wear for $>60$ min in a day and $<72\%$ h of wear data} & \imputcol{Average of similiar times on other days \citep{Hees2011,Sabia2014}} \\ \hline
+				
+				\cite{Ramakrishnan2021} & \xmark & \studycol{Physical activities in incidents of cardiovascular disease} & \statscol{Proportional hazards regression} & \excludcol{High outliers; $>1\%$ clipped values, non-wear for $>60$ min in a day and $<72\%$ hours of wear data \citep{Doherty2017}} & -- \\ \hline
+				
+				\cite{Lyall2018} & \cmark & \studycol{Association between CR and mood disorders} & \statscol{Logistic regression, Linear regression and Negative binomial regression} & \excludcol{Non-wear for $>60$ min in a day and $<72\%$ h of wear data \citep{Doherty2017}} & -- \\ \hline
+				
+				\cite{Jones2019} & \cmark & \studycol{Association between genomes, sleep parameters, quality, characteristics and diseases/syndromes} & \statscol{BOLT-REML \citep{Loh2015} and LD-score regression \citep{Zheng2017}} & \excludcol{Quality check \citep{Doherty2017}, interrupted recording periods, duration of interrupted recording period  $> Q_3 + 1.5 \times IQR$, average sleep duration $<3$ h or $>12$ h} & -- \\ \hline
+
+				\cite{Dashti2019} & \cmark & Association between short/long sleep and genomes & BOLT-LMM & \excludcol{Non-zero or missing value in problem indicator field, good wear time flag equal to `No', good calibration flag equal to `No', calibrated on own data flag equal to `No' and overall wer duration $<5$ days} & -- \\
+				\hline \hline
+			\end{tabular}
+		}
+	\end{table}
+\end{landscape}
+
+\bibliographystyle{agsm}
+\bibliography{summary_table}
+	
+\end{document}
