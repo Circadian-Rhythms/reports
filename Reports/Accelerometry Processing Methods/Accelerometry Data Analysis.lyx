@@ -1,0 +1,443 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style apacite
+\biblio_options round
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Accelerometry Analysis
+\end_layout
+
+\begin_layout Author
+Jack A.
+ Kilgallen
+\end_layout
+
+\begin_layout Date
+October 
+\begin_inset Formula $11^{th}$
+\end_inset
+
+, 
+\begin_inset Formula $2021$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Introduction
+\end_layout
+
+\begin_layout Standard
+The purpose of this document is to document and explain all of the data
+ processing methods applied to the UK Biobank accelerometry data.
+ The rationale behind this is two-fold:
+\end_layout
+
+\begin_layout Enumerate
+By creating a single document outlining all of the processing methods applied
+ to the data we can more clearly assess what impact these changes might
+ have on subsequent analysis.
+\end_layout
+
+\begin_layout Enumerate
+Having a single document containing all of this information would be a useful
+ learning tool, particularly for subsequent research groups working on similar
+ problems using the same data.
+\end_layout
+
+\begin_layout Standard
+The document is structured into four sections:
+\end_layout
+
+\begin_layout Enumerate
+Data collection.
+\end_layout
+
+\begin_layout Enumerate
+Preprocessing.
+\end_layout
+
+\begin_layout Enumerate
+Parameter estimation.
+\end_layout
+
+\begin_layout Enumerate
+Sanitising Data.
+\end_layout
+
+\begin_layout Section
+Data Collection
+\end_layout
+
+\begin_layout Standard
+The accelerometry data was collected using Axivity AX3 triaxial accelerometer.
+ The devices were worn by individuals for 7 consecutive days on their dominant
+ hand and were callibrated to record at 100Hz with a dynamic range of 
+\begin_inset Formula $\pm8g$
+\end_inset
+
+.
+ Data was collected from 
+\begin_inset Formula $103,720$
+\end_inset
+
+ individuals (out of 
+\begin_inset Formula $240,000$
+\end_inset
+
+ invited participants).
+ The data was exported from the devices in .cwa format.
+\end_layout
+
+\begin_layout Section
+Preprocessing
+\end_layout
+
+\begin_layout Standard
+The data was then preprocessed in several ways.
+ The first steps, aimed at reducing error due to device error, were:
+\end_layout
+
+\begin_layout Enumerate
+Recalibrating the data to limit the distortion effect of local gravity.
+\end_layout
+
+\begin_layout Enumerate
+Flagging clipped values outside of the sensors dynamic range (
+\begin_inset Formula $\pm8g$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+Resampling data to ensure that discrepancies in device sample rate were
+ minimised.
+\end_layout
+
+\begin_layout Standard
+The next steps were aimed at making the data more simple to work with:
+\end_layout
+
+\begin_layout Enumerate
+Using the euclidean norm to aggregate the axes of acceleration.
+\end_layout
+
+\begin_layout Enumerate
+Using a low pass filter (
+\begin_inset Formula $4^{th}$
+\end_inset
+
+ order Butterworth filter) with a cutoff frequency of 
+\begin_inset Formula $20$
+\end_inset
+
+Hz to eliminate machine noise.
+\end_layout
+
+\begin_layout Enumerate
+Accounting for gravity by subtracting 
+\begin_inset Formula $1g$
+\end_inset
+
+ from the vector magnitude.
+\end_layout
+
+\begin_layout Enumerate
+Downsampling the data by generating epochs to make the data more less computatio
+nally intensive to work with.
+\end_layout
+
+\begin_layout Enumerate
+Writing the resulting magnitude vector to a .csv file.
+\end_layout
+
+\begin_layout Section
+Parameter Estimation
+\end_layout
+
+\begin_layout Standard
+As part of the exploratory data analysis several summary statistics were
+ calculated for the data including both non-parametric, and parametric variables.
+ 
+\end_layout
+
+\begin_layout Subsection
+Non-parametric Measures of Rhythmicity
+\end_layout
+
+\begin_layout Standard
+The non-parametric measures of rhythmicity are the interdaily stability,
+ intradaily variability, and relative amplitude as described in van Someren
+ et al (1999).
+ 
+\end_layout
+
+\begin_layout Itemize
+Interdaily stability is calculated by:
+\begin_inset Formula 
+\[
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Intradaily variability is calculated by:
+\begin_inset Formula 
+\[
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Relative amplitude is calculated by:
+\begin_inset Formula 
+\[
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Periodograms
+\end_layout
+
+\begin_layout Standard
+A periodogram is a model of the spectral density of a signal i.e.
+ the distribution of the frequency components composing the signal.
+\end_layout
+
+\begin_layout Subsubsection
+The Cosinor Periodogram
+\end_layout
+
+\begin_layout Standard
+In a Cosinor periodogram the model is expressed by 
+\begin_inset Formula 
+\[
+Y\left(t\right)=M+\beta x+\gamma x+\epsilon\left(t\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula 
+\begin{align*}
+\beta= & A\cos\phi\\
+\gamma= & -A\sin\phi\\
+x= & \cos\left(\frac{2\pi t}{\tau}\right)\\
+z= & \sin\left(\frac{2\pi t}{\tau}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $M$
+\end_inset
+
+ is the Midline Statistic of Rhythm (MESOR), 
+\begin_inset Formula $A$
+\end_inset
+
+ is the amplitude, 
+\begin_inset Formula $\phi$
+\end_inset
+
+ is the acrophase, 
+\begin_inset Formula $\tau$
+\end_inset
+
+ is the period, and 
+\begin_inset Formula $\epsilon\left(t\right)$
+\end_inset
+
+ is the error term at time 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ Here 
+\begin_inset Formula $M$
+\end_inset
+
+, 
+\begin_inset Formula $\beta$
+\end_inset
+
+ and 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ are calculated to minimise the quantity
+\begin_inset Formula 
+\[
+\text{RSS}=\sum_{i=1}^{N}\left[Y_{i}-\left(\hat{M}+\hat{\beta}x_{i}+\hat{\gamma}z_{i}\right)\right]^{2}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The parameter estimates that minimise this quantity can be calculated by
+\begin_inset Formula 
+\[
+\begin{bmatrix}\hat{M}\\
+\hat{\beta}\\
+\hat{\gamma}
+\end{bmatrix}=\begin{bmatrix}N & \sum_{i=1}^{N}x_{i} & \sum_{i=1}^{N}z_{i}\\
+\sum_{i=1}^{N}x_{i} & \sum_{i=1}^{N}x_{i}^{2} & \sum_{i=1}^{N}x_{i}z_{i}\\
+\sum_{i=1}^{N}z_{i} & \sum_{i=1}^{N}x_{i}z_{i} & \sum_{i=1}^{N}z_{i}^{2}
+\end{bmatrix}\begin{bmatrix}\sum_{i=1}^{N}Y_{i}\\
+\sum_{i=1}^{N}Y_{i}x_{i}\\
+\sum_{i=1}^{N}Y_{i}z_{i}
+\end{bmatrix}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can then estimate 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi$
+\end_inset
+
+ by 
+\begin_inset Formula 
+\[
+\hat{A}=\left(\hat{\beta}^{2}+\hat{\gamma}^{2}\right)^{\frac{1}{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\phi}=\arctan\left(-\frac{\hat{\gamma}}{\hat{\beta}}\right)+K\pi
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for some 
+\begin_inset Formula $K\in\mathbb{N}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+The Lomb-Scargle Periodogram
+\end_layout
+
+\end_body
+\end_document
